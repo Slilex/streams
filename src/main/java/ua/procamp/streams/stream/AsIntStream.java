@@ -99,12 +99,12 @@ public class AsIntStream implements IntStream {
 
     @Override
     public IntStream map(IntUnaryOperator mapper) {
-        this.operations.add( mapper);
+        this.operations.add(mapper);
         return this;    }
 
     @Override
     public IntStream flatMap(IntToIntStreamFunction func) {
-        this.operations.add( func);
+        this.operations.add(func);
         return this;    }
 
     @Override
