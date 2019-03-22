@@ -125,7 +125,7 @@ public class InterimArray<T> implements Iterable<T> {
         return true;
     }
 
-    public T rm(int position) {
+    public T remove(int position) {
         if (position >= capacity) {
             throw new IndexOutOfBoundsException(
                     "Index: " + position + ", Size: " + capacity);
@@ -143,7 +143,7 @@ public class InterimArray<T> implements Iterable<T> {
     }
 
     public Iterator<T> iterator() {
-        return new VectorArrayIterator<T>(this);
+        return new InterimArrayIterator<T>(this);
     }
 
     public boolean equals(Object obj) {
@@ -177,12 +177,12 @@ public class InterimArray<T> implements Iterable<T> {
         return 42;
     }
 
-    private class VectorArrayIterator<T> implements Iterator<T> {
+    private class InterimArrayIterator<T> implements Iterator<T> {
         private int current = 0;
         private InterimArray<T> values;
 
-        public VectorArrayIterator(InterimArray<T> vec) {
-            this.values = vec;
+        public InterimArrayIterator(InterimArray<T> interimArray) {
+            this.values = interimArray;
         }
 
         public boolean hasNext() {
@@ -200,7 +200,7 @@ public class InterimArray<T> implements Iterable<T> {
         }
 
         public T remove(int pos) {
-            return this.values.rm(pos);
+            return this.values.remove(pos);
         }
 
     }
