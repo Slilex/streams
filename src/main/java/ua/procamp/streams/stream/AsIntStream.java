@@ -49,13 +49,8 @@ public class AsIntStream implements IntStream {
         this.updateOperationsList();
 
         return reduce(Integer.MIN_VALUE, (m, v) -> {
-            // returns maximal value of (m, v)
-            if (m > v) {
-                return m;
-            }
-            else {
-                return v;
-            }
+            if (m > v) return m;
+            else return v;
         });    }
 
     @Override
@@ -66,13 +61,9 @@ public class AsIntStream implements IntStream {
         this.updateOperationsList();
 
         return reduce(Integer.MAX_VALUE, (m, v) -> {
-            // returns minimal value of (m, v)
-            if (m < v) {
-                return m;
-            }
-            else {
-                return v;
-            }
+
+            if (m > v) return m;
+            else return v;
         });
     }
 
