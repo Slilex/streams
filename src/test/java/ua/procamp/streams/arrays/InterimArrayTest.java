@@ -23,6 +23,11 @@ public class InterimArrayTest {
         assertEquals(exp, act);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void  createInterimArrayWithCapacityLessNull(){
+        InterimArray interimArray = new InterimArray(-2);
+    }
+
     @Test
     public void  createInterimArrayOtherCapacity() throws NoSuchFieldException, IllegalAccessException {
         InterimArray interimArray = new InterimArray(95);
@@ -108,6 +113,28 @@ public class InterimArrayTest {
         InterimArray interimArray = new InterimArray();
 
         assertTrue(interimArray.add(1));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    @SuppressWarnings("unchecked")
+    public void illegalPositionOnSet(){
+        InterimArray interimArray = new InterimArray(5,6,8,8);
+        interimArray.set(10,5);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    @SuppressWarnings("unchecked")
+    public void capacityNullOnFill(){
+        InterimArray interimArray = new InterimArray(0);
+        interimArray.fill(5);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    @SuppressWarnings("unchecked")
+    public void positionLargerOrEqualsCapacityOnRemove() {
+        InterimArray interimArray = new InterimArray(58);
+        interimArray.remove(58);
+
     }
 
 
