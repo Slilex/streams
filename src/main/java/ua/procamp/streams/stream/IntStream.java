@@ -2,7 +2,6 @@ package ua.procamp.streams.stream;
 
 import ua.procamp.streams.function.*;
 
-import java.util.function.IntFunction;
 
 public interface IntStream {
 

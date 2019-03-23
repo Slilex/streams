@@ -3,7 +3,6 @@ package ua.procamp.streams.stream;
 import ua.procamp.streams.arrays.InterimArray;
 import ua.procamp.streams.function.*;
 
-import java.util.Arrays;
 
 public class AsIntStream implements IntStream {
 

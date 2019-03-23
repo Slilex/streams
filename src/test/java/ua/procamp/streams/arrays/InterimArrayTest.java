@@ -19,6 +19,7 @@ public class InterimArrayTest {
         field.setAccessible   (true);
         int act  =  (int) field.get  (interimArray);
         int exp = 0;
+
         assertEquals(exp, act);
     }
 
@@ -29,6 +30,7 @@ public class InterimArrayTest {
         field.setAccessible   (true);
         int act  =  (int) field.get  (interimArray);
         int exp = 95;
+
         assertEquals(exp, act);
     }
 
@@ -75,6 +77,7 @@ public class InterimArrayTest {
         }
         int act  = interimArray.size();
         int exp = size;
+
         assertEquals(exp, act);
 
     }
@@ -85,6 +88,7 @@ public class InterimArrayTest {
         InterimArray<Integer> interimArray = new InterimArray(1,2,3,5,-5,-4,-7,0);
         Integer act = interimArray.get(5);
         Integer exp = -4;
+
         assertEquals(act, exp);
 
     }
@@ -95,12 +99,14 @@ public class InterimArrayTest {
         InterimArray actArray = new InterimArray(1,2,3,5,10,-5,-4,-7,0);
         actArray.remove(4);
         InterimArray expArray = new InterimArray(1,2,3,5,-5,-4,-7,0);
+
         assertEquals(expArray,actArray);
     }
 
     @Test
     public void addReturnTrue(){
         InterimArray interimArray = new InterimArray();
+
         assertTrue(interimArray.add(1));
     }
 
