@@ -1,6 +1,10 @@
 package ua.procamp.streams.arrays;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
+
+import static java.lang.System.*;
 
 /**
  * This class is developed by Ivanov Alexey (mrSlilex@gmail.com) on 22.03.2019
@@ -10,21 +14,23 @@ public class InterimArray<T> implements Iterable<T> {
 
 
     private static final int DEFAULT_CAPACITY = 3;
-
     private T[] data;
     private int capacity;
 
+    @SuppressWarnings("unchecked")
     public InterimArray() {
         this.capacity = 0;
         this.data = (T[]) new Object[DEFAULT_CAPACITY];
     }
 
-    public InterimArray(T ... values) {
+    @SuppressWarnings("unchecked")
+    public  InterimArray(T ... values) {
         this.capacity = 0;
         this.data = (T[]) new Object[DEFAULT_CAPACITY];
         this.add(values);
     }
 
+    @SuppressWarnings("unchecked")
     public InterimArray(int initialCapacity) {
         if (initialCapacity < 0) {
             throw new IllegalArgumentException(
@@ -35,6 +41,7 @@ public class InterimArray<T> implements Iterable<T> {
         this.data = (T[]) new Object[initialCapacity];
     }
 
+    @SuppressWarnings("unchecked")
     public InterimArray(int initialCapacity, T initialValue) {
         if (initialCapacity < 0) {
             throw new IllegalArgumentException(
@@ -54,12 +61,11 @@ public class InterimArray<T> implements Iterable<T> {
         return data[position];
     }
 
+    @SuppressWarnings("unchecked")
     public T[] toArray() {
         T[] ans = (T[]) new Object[this.capacity];
 
-        for (int i = 0; i < this.capacity; i++) {
-            ans[i] = this.data[i];
-        }
+        System.arraycopy(data, 0, data, 0, capacity);
 
         return ans;
     }
@@ -73,10 +79,7 @@ public class InterimArray<T> implements Iterable<T> {
     }
 
     public boolean isEmpty() {
-        if (capacity == 0) {
-            return true;
-        }
-        return false;
+        return capacity == 0;
     }
 
     public void fill(T value) {
@@ -89,6 +92,7 @@ public class InterimArray<T> implements Iterable<T> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void validateCapacity(int minCapacity) {
         int old = this.data.length;
         if (minCapacity > old) {
@@ -101,7 +105,7 @@ public class InterimArray<T> implements Iterable<T> {
             }
 
             this.data = (T[]) new Object[newCapacity];
-            System.arraycopy(oldData, 0, data, 0, capacity);
+            arraycopy(oldData, 0, data, 0, capacity);
         }
     }
 
@@ -111,10 +115,9 @@ public class InterimArray<T> implements Iterable<T> {
         return true;
     }
 
-    public boolean add(T ... values) {
-        for (T value : values) {
-            this.add(value);
-        }
+    @SafeVarargs
+    public final boolean add(T... values) {
+        for (T value : values) this.add(value);
         return true;
     }
 
@@ -134,7 +137,7 @@ public class InterimArray<T> implements Iterable<T> {
 
         int numMoved = this.capacity - position - 1;
         if (numMoved > 0) {
-            System.arraycopy(this.data, position + 1,
+            arraycopy(this.data, position + 1,
                     this.data, position, numMoved);
         }
         this.data[--this.capacity] = null;
@@ -173,8 +176,11 @@ public class InterimArray<T> implements Iterable<T> {
 
     }
 
+    @Override
     public int hashCode() {
-        return 42;
+        int result = Objects.hash(capacity);
+        result = 31 * result + Arrays.hashCode(data);
+        return result;
     }
 
     private class InterimArrayIterator<T> implements Iterator<T> {

@@ -1,6 +1,11 @@
 package ua.procamp.streams.stream;
 
 import org.junit.Test;
+import ua.procamp.streams.arrays.InterimArray;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import static org.junit.Assert.*;
 
@@ -15,8 +20,21 @@ public class AsIntStreamTest {
 
 
 
+
     @Test
-    public void ofEmptyValues() {
+    public void ofEmptyValues() throws NoSuchFieldException, IllegalAccessException {
+        IntStream str = AsIntStream.of();
+        Field field = AsIntStream.class.getDeclaredField("values");
+        field.setAccessible   (true);
+        InterimArray interimArray = (InterimArray)  field.get(str);
+        int act = interimArray.size();
+        int exp = 0;
+
+        assertEquals(exp,act);
+    }
+
+    @Test
+    public void toArrayOnEmptyStream() {
         IntStream str = AsIntStream.of();
 
         int[] exp = {};
@@ -26,10 +44,23 @@ public class AsIntStreamTest {
     }
 
     @Test
-    public void ofSimpleValues() {
+    public void ofSimpleValues() throws NoSuchFieldException, IllegalAccessException {
         IntStream str = AsIntStream.of(1, 2, 3);
+        Field field = AsIntStream.class.getDeclaredField("values");
+        field.setAccessible   (true);
+        InterimArray interimArray = (InterimArray)  field.get(str);
+        int act = interimArray.size();
+        int exp = 3;
 
-        int[] exp = {1, 2, 3};
+        assertEquals(exp, act);
+    }
+
+
+    @Test
+    public void toArrayOnSomeValues() {
+        IntStream str = AsIntStream.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        int[] exp = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         int[] act = str.toArray();
 
         assertArrayEquals(exp, act);
@@ -88,8 +119,8 @@ public class AsIntStreamTest {
     }
 
     @Test
-    public void maxOnExtrimalValues() {
-        IntStream str = AsIntStream.of(MAX, 555, -555, 1488, MIN, 15864, 95995);
+    public void maxOnBigValues() {
+        IntStream str = AsIntStream.of(MAX, 95155, -899944, 1488, MIN, 21555, 95995);
 
         int exp = MAX;
         int act = str.max().intValue();
@@ -114,13 +145,13 @@ public class AsIntStreamTest {
     }
 
     @Test
-    public void minOnExtrimalValues() {
-        IntStream str = AsIntStream.of(MAX, 555, -555, 1488, MIN, 15864, 95995);
+    public void minOnBigValues() {
+        IntStream str = AsIntStream.of(MAX, 159585, -1915562, 1488, MIN, 15864, 95995);
 
         int exp = MIN;
         int act = str.min().intValue();
 
-        assertEquals(exp, act);
+        assertTrue(exp == act);
     }
 
     @Test
@@ -169,25 +200,6 @@ public class AsIntStreamTest {
         assertEquals(exp, act, 1e-10);
     }
 
-    @Test
-    public void toArrayOnEmptyStream() {
-        IntStream str = AsIntStream.of();
-
-        int[] exp = {};
-        int[] act = str.toArray();
-
-        assertArrayEquals(exp, act);
-    }
-
-    @Test
-    public void toArrayOnSomeValues() {
-        IntStream str = AsIntStream.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-
-        int[] exp = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        int[] act = str.toArray();
-
-        assertArrayEquals(exp, act);
-    }
 
     @Test
     public void forEachOnEmptyValues() {
@@ -212,7 +224,7 @@ public class AsIntStreamTest {
         int exp = 0;
         int act = tmp.getValue();
 
-        assertEquals(exp, act);
+        assertTrue(exp == act);
     }
 
     @Test
@@ -238,7 +250,7 @@ public class AsIntStreamTest {
         int exp = 45;
         int act = tmp.getValue();
 
-        assertEquals(exp, act);
+        assertTrue(exp ==act);
     }
 
     @Test
@@ -255,9 +267,9 @@ public class AsIntStreamTest {
     @Test
     public void filterOnSomeValues() {
         IntStream str = AsIntStream.of(0, 1, 2, 3, 4, 5);
-        str.filter(value -> (value & value + 1 ) == value);
+        str.filter(value -> value >=3);
 
-        int[] exp = {0, 2, 4};
+        int[] exp = {3, 4, 5};
         int[] act = str.toArray();
 
         assertArrayEquals(exp, act);
@@ -265,10 +277,10 @@ public class AsIntStreamTest {
 
     @Test
     public void filterOnSomeValuesWithAllInFilter() {
-        IntStream str = AsIntStream.of(666, 666, 666, 666, 666);
+        IntStream str = AsIntStream.of(12345678, 12345678, 12345678, 12345678, 12345678);
         str.filter(value -> (value & value + 1 ) == value);
 
-        int[] exp = {666, 666, 666, 666, 666};
+        int[] exp = {12345678, 12345678, 12345678, 12345678, 12345678};
         int[] act = str.toArray();
 
         assertArrayEquals(exp, act);
@@ -319,22 +331,23 @@ public class AsIntStreamTest {
     }
 
     @Test
-    public void reduseOnEmptyValues() {
+    public void reduceOnEmptyValues() {
         IntStream str = AsIntStream.of();
 
         int exp = 0;
         int act = str.reduce(0, (a, b) -> a * b);
 
-        assertEquals(exp, act);
+        assertTrue(exp == act);
     }
 
     @Test
-    public void reduseOnSomeValues() {
-        IntStream str = AsIntStream.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    public void reduceOnSomeValues() {
+       IntStream str = AsIntStream.of(1,2,3,4,5,6);
+        int exp = 3600;
+        int act = str.reduce(5, (a, b) -> a * b);
 
-        int exp = 0;
-        int act = str.reduce(0, (a, b) -> a * b);
-
-        assertEquals(exp, act);
+        assertTrue(exp == act);
     }
+
+
 }

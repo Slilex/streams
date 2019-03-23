@@ -3,6 +3,8 @@ package ua.procamp.streams.stream;
 import ua.procamp.streams.arrays.InterimArray;
 import ua.procamp.streams.function.*;
 
+import java.util.Arrays;
+
 public class AsIntStream implements IntStream {
 
     private InterimArray<Integer> values;
@@ -14,11 +16,13 @@ public class AsIntStream implements IntStream {
 
     }
 
+
     public static IntStream of(int... values) {
 
         AsIntStream stream = new AsIntStream();
+        Integer[] integerValues =
+                new Integer[values.length];
 
-        Integer[] integerValues = new Integer[values.length];
         for (int i = 0; i < values.length; i++) {
             integerValues[i] = values[i];
         }

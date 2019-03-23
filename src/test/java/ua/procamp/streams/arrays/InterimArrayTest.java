@@ -33,6 +33,7 @@ public class InterimArrayTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void  createInterimArrayWithsValues() throws NoSuchFieldException, IllegalAccessException {
         InterimArray interimArray = new InterimArray(1,2,3,5,-5,-4,-7,0);
         Object[] expArray = new Integer[]{1,2,3,5,-5,-4,-7,0};
@@ -47,6 +48,7 @@ public class InterimArrayTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void  createInterimArrayWithCapacityAndValues() throws NoSuchFieldException, IllegalAccessException {
         int n = 100;
         InterimArray interimArray = new InterimArray(n,5);
@@ -69,7 +71,7 @@ public class InterimArrayTest {
         int size = 112;
         InterimArray interimArray = new InterimArray();
         for (int i = 0; i < size ; i++) {
-            interimArray.add(i);
+           interimArray.add(i);
         }
         int act  = interimArray.size();
         int exp = size;
@@ -78,12 +80,28 @@ public class InterimArrayTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void getPosition(){
         InterimArray<Integer> interimArray = new InterimArray(1,2,3,5,-5,-4,-7,0);
         Integer act = interimArray.get(5);
         Integer exp = -4;
-        assertTrue(act.equals(exp));
+        assertEquals(act, exp);
 
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void remove(){
+        InterimArray actArray = new InterimArray(1,2,3,5,10,-5,-4,-7,0);
+        actArray.remove(4);
+        InterimArray expArray = new InterimArray(1,2,3,5,-5,-4,-7,0);
+        assertEquals(expArray,actArray);
+    }
+
+    @Test
+    public void addReturnTrue(){
+        InterimArray interimArray = new InterimArray();
+        assertTrue(interimArray.add(1));
     }
 
 
