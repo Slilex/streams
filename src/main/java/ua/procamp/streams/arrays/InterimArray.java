@@ -65,7 +65,7 @@ public class InterimArray<T> implements Iterable<T> {
     public T[] toArray() {
         T[] ans = (T[]) new Object[this.capacity];
 
-        System.arraycopy(data, 0, data, 0, capacity);
+        System.arraycopy(data, 0, ans, 0, capacity);
 
         return ans;
     }
