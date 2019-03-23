@@ -1,11 +1,14 @@
 package ua.procamp.streams.stream;
 
 import ua.procamp.streams.arrays.InterimArray;
-import ua.procamp.streams.function.*;
+import ua.procamp.streams.function.IntBinaryOperator;
+import ua.procamp.streams.function.IntFunction;
+import ua.procamp.streams.function.IntToIntStreamFunction;
+import ua.procamp.streams.function.IntPredicate;
+import ua.procamp.streams.function.IntUnaryOperator;
+import ua.procamp.streams.function.IntConsumer;
 
-
-public class AsIntStream implements IntStream {
-
+public final class AsIntStream implements IntStream {
     private InterimArray<Integer> values;
     private InterimArray<IntFunction> operations;
 
@@ -16,7 +19,7 @@ public class AsIntStream implements IntStream {
     }
 
 
-    public static IntStream of(int... values) {
+    public static IntStream of(final int... values) {
 
         AsIntStream stream = new AsIntStream();
         Integer[] integerValues =
@@ -37,8 +40,8 @@ public class AsIntStream implements IntStream {
             throw new IllegalArgumentException("Illegal capacity of values");
         }
         this.updateOperationsList();
-
-        return (double) this.sum() / this.count();    }
+        return (double) this.sum() / this.count();
+    }
 
     @Override
     public Integer max() {
@@ -47,15 +50,15 @@ public class AsIntStream implements IntStream {
         }
         this.updateOperationsList();
 
-        return reduce(Integer.MIN_VALUE, (m, v) -> {
-            if (m > v) {
-                return m;
-            }
-            else {
-                return v;
-            }
+        return reduce(Integer.MIN_VALUE, (m, v) -> apply(m, v, m > v));
+    }
 
-        });
+    private int apply(final int m, final int v, final boolean b) {
+        if (b) {
+            return m;
+        } else {
+            return v;
+        }
     }
 
     @Override
@@ -65,21 +68,14 @@ public class AsIntStream implements IntStream {
         }
         this.updateOperationsList();
 
-        return reduce(Integer.MAX_VALUE, (m, v) -> {
-            if (m < v) {
-                return m;
-            }
-            else {
-                return v;
-            }
-
-        });
+        return reduce(Integer.MAX_VALUE, (m, v) -> apply(m, v, m < v));
     }
 
     @Override
     public long count() {
        this.updateOperationsList();
-        return (long) this.values.size();    }
+       return (long) this.values.size();
+    }
 
     @Override
     public Integer sum() {
@@ -87,39 +83,45 @@ public class AsIntStream implements IntStream {
             throw new IllegalArgumentException("Illegal capacity of values");
         }
         this.updateOperationsList();
-        return reduce(0, (sum, v) -> sum += v);    }
+        return reduce(0, (sum, v) -> sum += v);
+    }
 
     @Override
-    public IntStream filter(IntPredicate predicate) {
+    public IntStream filter(final IntPredicate predicate) {
        this.operations.add(predicate);
-        return this;    }
+       return this;
+    }
 
     @Override
-    public void forEach(IntConsumer action) {
+    public void forEach(final IntConsumer action) {
         this.updateOperationsList();
         for (int i = 0; i < this.values.size(); i++) {
             action.accept(this.values.get(i));
-        }    }
+       }
+    }
 
     @Override
-    public IntStream map(IntUnaryOperator mapper) {
+    public IntStream map(final IntUnaryOperator mapper) {
         this.operations.add(mapper);
-        return this;    }
+        return this;
+    }
 
     @Override
-    public IntStream flatMap(IntToIntStreamFunction func) {
+    public IntStream flatMap(final IntToIntStreamFunction func) {
         this.operations.add(func);
-        return this;    }
+        return this;
+    }
 
     @Override
-    public int reduce(int identity, IntBinaryOperator op) {
+    public int reduce(final int identity, final IntBinaryOperator op) {
         this.updateOperationsList();
         int res = identity;
         for (int i = 0; i < this.values.size(); i++) {
             res = op.apply(res, this.values.get(i));
         }
 
-        return res;    }
+        return res;
+    }
 
     @Override
     public int[] toArray() {
@@ -134,7 +136,7 @@ public class AsIntStream implements IntStream {
     }
 
 
-    private void usePredicate(IntPredicate predicate) {
+    private void usePredicate(final IntPredicate predicate) {
         InterimArray<Integer> interimArray = new InterimArray<>();
 
         for (int i = 0; i < this.values.size(); i++) {
@@ -146,7 +148,7 @@ public class AsIntStream implements IntStream {
         this.values = interimArray;
     }
 
-    private void useUnaryOperator(IntUnaryOperator operator) {
+    private void useUnaryOperator(final IntUnaryOperator operator) {
         InterimArray<Integer> interimArray = new InterimArray<>();
 
         for (int i = 0; i < this.values.size(); i++) {
@@ -156,7 +158,7 @@ public class AsIntStream implements IntStream {
         this.values = interimArray;
     }
 
-    private void useStreamFunction(IntToIntStreamFunction function) {
+    private void useStreamFunction(final IntToIntStreamFunction function) {
         InterimArray<Integer> interimArray = new InterimArray<>();
 
         for (int i = 0; i < this.values.size(); i++) {
