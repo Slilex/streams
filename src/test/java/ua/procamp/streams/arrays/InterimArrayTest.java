@@ -188,7 +188,25 @@ public class InterimArrayTest {
         int exp = 66192;
 
         assertTrue(act == exp);
+    }
 
+    @Test
+    public void contraktHashCodeAndEquals(){
+        InterimArray actArray = new InterimArray(2,5,6);
+        int act = actArray.hashCode();
+        InterimArray expArray = new InterimArray(2,5,6);
+        int exp = expArray.hashCode();
+
+        assertTrue(exp == act);
+
+        assertTrue(actArray.equals(expArray));
+
+        expArray.add(1);
+        exp = expArray.hashCode();
+
+        assertFalse(exp== act);
+
+        assertFalse(actArray.equals(expArray));
     }
 
 }
