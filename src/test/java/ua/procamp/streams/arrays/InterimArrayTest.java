@@ -120,6 +120,7 @@ public class InterimArrayTest {
     public void illegalPositionOnSet(){
         InterimArray interimArray = new InterimArray(5,6,8,8);
         interimArray.set(10,5);
+        interimArray.set(3,4);
     }
 
     @Test(expected = IllegalArgumentException.class)

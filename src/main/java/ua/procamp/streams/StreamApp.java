@@ -1,5 +1,6 @@
 package ua.procamp.streams;
 
+import ua.procamp.streams.arrays.InterimArray;
 import ua.procamp.streams.stream.AsIntStream;
 import ua.procamp.streams.stream.IntStream;
 

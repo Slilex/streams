@@ -15,9 +15,7 @@ public final class AsIntStream implements IntStream {
     private AsIntStream() {
         values = new InterimArray<>();
         operations = new InterimArray<>();
-
     }
-
 
     public static IntStream of(final int... values) {
 
