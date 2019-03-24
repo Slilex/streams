@@ -74,7 +74,8 @@ public class InterimArrayTest {
     }
 
     @Test
-    public void returnSizeArrayAndAddFunction() throws NoSuchFieldException, IllegalAccessException {
+    @SuppressWarnings("unchecked")
+    public void returnSizeArrayAndAddFunction(){
         int size = 112;
         InterimArray interimArray = new InterimArray();
         for (int i = 0; i < size ; i++) {
@@ -104,11 +105,14 @@ public class InterimArrayTest {
         InterimArray actArray = new InterimArray(1,2,3,5,10,-5,-4,-7,0);
         actArray.remove(4);
         InterimArray expArray = new InterimArray(1,2,3,5,-5,-4,-7,0);
+        Object[] act = actArray.toArray();
+        Object[] exp = expArray.toArray();
 
-        assertEquals(expArray,actArray);
+        assertArrayEquals(exp,act);
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void addReturnTrue(){
         InterimArray interimArray = new InterimArray();
 
@@ -120,8 +124,20 @@ public class InterimArrayTest {
     public void illegalPositionOnSet(){
         InterimArray interimArray = new InterimArray(5,6,8,8);
         interimArray.set(10,5);
-        interimArray.set(3,4);
+
     }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void SetValue(){
+        InterimArray interimArray = new InterimArray(5,6,8,8);
+        final Integer exp =99;
+        interimArray.set(2,exp);
+        Integer act = (Integer) interimArray.get(2);
+
+        assertEquals(exp,act);
+    }
+
 
     @Test(expected = IllegalArgumentException.class)
     @SuppressWarnings("unchecked")
@@ -138,5 +154,41 @@ public class InterimArrayTest {
 
     }
 
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testResizeArrayOnAdd() throws NoSuchFieldException, IllegalAccessException {
+        final int SIZE = 16;
+        int exp = (SIZE * 3) / 2 + 1;  // 25
+        InterimArray interimArray = new InterimArray(SIZE);
+        interimArray.add(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17);
+
+        Field field = InterimArray.class.getDeclaredField("data");
+        field.setAccessible   (true);
+        Object [] data  = (Object[]) field.get  (interimArray);
+        int act = data.length;
+        assertTrue(act == exp);
+
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testReSizeArrayOnRemove() throws NoSuchFieldException, IllegalAccessException {
+        int SIZE = 100000;
+        InterimArray interimArray = new InterimArray();
+        for (int i = 0; i < SIZE ; i++) {
+            interimArray.add(i);
+        }
+        for (int i = SIZE*2/3; i != 0; i--) {
+            interimArray.remove(i);
+        }
+        Field field = InterimArray.class.getDeclaredField("data");
+        field.setAccessible   (true);
+        Object [] data  = (Object[]) field.get  (interimArray);
+        int act = data.length;
+        int exp = 66192;
+
+        assertTrue(act == exp);
+
+    }
 
 }

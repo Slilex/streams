@@ -11,9 +11,10 @@ import java.util.Objects;
 public class InterimArray<T> implements Iterable<T> {
 
     private static final int DEFAULT_CAPACITY = 16;
-    private static final int CUT_RATE = 4;
+    private static final int CUT_RATE = 3;
     private T[] data;
     private int capacity;
+    private int size = 0;
 
     @SuppressWarnings("unchecked")
     public InterimArray() {
@@ -37,7 +38,7 @@ public class InterimArray<T> implements Iterable<T> {
     }
 
     @SuppressWarnings("unchecked")
-    InterimArray(final int initialCapacity, final T initialValue) {
+    public InterimArray(final int initialCapacity, final T initialValue) {
         validationCapacity(initialCapacity);
 
         this.capacity = initialCapacity;
@@ -56,10 +57,11 @@ public class InterimArray<T> implements Iterable<T> {
      *of the array its increase in (data.length * 3) / 2 + 1) times
      */
     public boolean add(T value) {
-        if (capacity == data.length - 1) {
+        if (capacity == (data.length)) {
             resize((data.length * 3) / 2 + 1);
         }
-        this.data[capacity++] = value;
+        this.data[size++] = value;
+        capacity = size;
         return true;
     }
 
@@ -70,7 +72,7 @@ public class InterimArray<T> implements Iterable<T> {
         }
     }
 
-    public final void add(final InterimArray<T> values) {
+    public void add(final InterimArray<T> values) {
         for (int i = 0; i < values.size(); i++) {
             this.add(values.get(i));
         }
@@ -98,24 +100,29 @@ public class InterimArray<T> implements Iterable<T> {
      *then the internal array is halved, to save occupied
      *places.
      */
+    @SuppressWarnings("unchecked")
     public void remove(final int index) {
-        if (index >= capacity) {
+        if (index >= size) {
             throw new IndexOutOfBoundsException(
-                    "Index: " + index + ", Size: " + capacity);
+                    "Index: " + index + ", Size: " + size);
         }
-        for (int i = index; i < capacity; i++) {
-            data[i] = data[i + 1];
+        if (size - index >= 0) {
+            System.arraycopy(data, index + 1, data, index, size - index);
         }
-        data[capacity] = null;
         capacity--;
-        if (data.length > DEFAULT_CAPACITY
-                && capacity < data.length / CUT_RATE) {
-            resize(data.length / 2);
-        }
+        size--;
+            if (data.length > DEFAULT_CAPACITY
+                    && data.length > (size * CUT_RATE)) {
+                T[] newArray = (T[]) new Object[(data.length / 2)];
+                for (int i = 0; i < newArray.length; i++) {
+                    newArray[i] = data[i];
+                    data = newArray;
+                }
+            }
 
     }
 
-    public final void set(final int index, final T value) {
+    public void set(final int index, final T value) {
         if (index > capacity || index < 0) {
             throw new IllegalArgumentException("Illegal Position");
         }
