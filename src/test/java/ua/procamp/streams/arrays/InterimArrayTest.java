@@ -191,6 +191,32 @@ public class InterimArrayTest {
     }
 
     @Test
+    public void iteratorTestHasNextArray(){
+        InterimArray actArray = new InterimArray();
+        assertFalse(actArray.iterator().hasNext());
+        actArray.add(6);
+
+        assertTrue(actArray.iterator().hasNext());
+        assertTrue(actArray.iterator().hasNext());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void iteratorTestNextOnEmptyArray (){
+        InterimArray actArray = new InterimArray();
+
+        actArray.iterator().next();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void iteratorTestRemoveOnEmptyArray (){
+        InterimArray actArray = new InterimArray();
+
+        actArray.iterator().remove();
+    }
+
+
+    @Test
+    @SuppressWarnings("unchecked")
     public void contraktHashCodeAndEquals(){
         InterimArray actArray = new InterimArray(2,5,6);
         int act = actArray.hashCode();
