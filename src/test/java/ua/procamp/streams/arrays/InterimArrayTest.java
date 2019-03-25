@@ -191,6 +191,7 @@ public class InterimArrayTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void iteratorTestHasNextArray(){
         InterimArray actArray = new InterimArray();
         assertFalse(actArray.iterator().hasNext());
